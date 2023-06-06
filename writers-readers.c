@@ -39,18 +39,18 @@ int main(int argc, char const *argv[])
 /* Writer value(s) */
 void *writer(void *param) {
     int i;
-    for(i=0;i<50;i++)
+    for(i=0;i<20;i++)
     {
         pthread_mutex_lock(&m);
             while (n_readers > 0)
             {
                 pthread_cond_wait(&c_writer,&m);
             }
-            shared_var = rand();
+            shared_var = rand()%100;
             n_writers++;
         pthread_mutex_unlock(&m);
         pthread_cond_broadcast(&c_reader);
-        printf("Shared variable value is: %d\n",shared_var);
+        printf("I wrote Shared variable to: %d\n%d writers\n",shared_var,n_writers);
         fflush(stdout);
         sleep((rand()%10)+1);
     }
@@ -60,7 +60,7 @@ void *writer(void *param) {
 /* Reader value(s) */
 void *reader(void *param) {
     int i,read;
-    for(i=0;i<50;i++){
+    for(i=0;i<20;i++){
         pthread_mutex_lock(&m);
             if(n_writers < 0){
                 exit(1);
@@ -72,7 +72,7 @@ void *reader(void *param) {
             n_writers--;
         pthread_mutex_unlock(&m);
         pthread_cond_signal(&c_writer);
-        printf("Shared variable value read is: %d\n",read);
+        printf("Shared variable value read is: %d\n%d readers\n",read);
         sleep((rand()%10)+1);
 
     }
