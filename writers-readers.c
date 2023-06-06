@@ -54,7 +54,7 @@ void *writer(void *param) {
         fflush(stdout);
         sleep((rand()%10)+1);
     }
-
+    return 0;
 }
 
 /* Reader value(s) */
@@ -76,5 +76,5 @@ void *reader(void *param) {
         sleep((rand()%10)+1);
 
     }
-
+    return 0;
 }
